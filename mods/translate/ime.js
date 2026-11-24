@@ -39,16 +39,20 @@ function cuts(run, limit = 6) {
   return out.sort((a, b) => (a.rest ? 1 : 0) - (b.rest ? 1 : 0) || a.syls.length - b.syls.length);
 }
 
-// The longest dictionary words chained end to end: a guess for a whole phrase.
+// A guess for a whole phrase: the fewest dictionary words that cover it, preferring
+// words over single characters ("ce shi yi xia" is 测试 + 一下, not 测试仪 + 下).
 function phrase(cut) {
-  let text = "", i = 0;
-  while (i < cut.syls.length) {
-    let n = Math.min(6, cut.syls.length - i), hit = null;
-    for (; n >= 1; n--) { hit = words(cut.syls.slice(i, i + n))[0]; if (hit) break; }
-    if (!hit) return null;
-    text += hit; i += n;
+  const n = cut.syls.length, best = new Array(n + 1).fill(null);
+  best[n] = { cost: 0, text: "" };
+  for (let i = n - 1; i >= 0; i--) {
+    for (let len = Math.min(6, n - i); len >= 1; len--) {
+      const hit = words(cut.syls.slice(i, i + len))[0], rest = best[i + len];
+      if (!hit || !rest) continue;
+      const cost = rest.cost + 1 + (len === 1 ? 0.6 : 0);
+      if (!best[i] || cost < best[i].cost) best[i] = { cost, text: hit + rest.text };
+    }
   }
-  return text;
+  return best[0]?.text ?? null;
 }
 
 /** Candidates for a run of lowercase letters and apostrophes typed as pinyin.

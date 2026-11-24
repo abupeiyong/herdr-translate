@@ -93,4 +93,4 @@ You can type a whole phrase at once (`bangwokanyixia` → 帮我看一下). Most
 
 ## License
 
-GPL-3.0. The pinyin dictionary (`mods/translate/dict.js`) is cut from [rime-ice](https://github.com/iDvel/rime-ice), which is GPL-3.0.
+Apache-2.0. The pinyin dictionary (`mods/translate/dict.js`) is built from MIT-licensed data: word frequencies from [jieba](https://github.com/fxsjy/jieba), readings from [pinyin-data](https://github.com/mozillazg/pinyin-data) and [phrase-pinyin-data](https://github.com/mozillazg/phrase-pinyin-data). Their notices are in [NOTICE](NOTICE).
